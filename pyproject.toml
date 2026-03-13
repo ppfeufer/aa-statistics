@@ -1,0 +1,46 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+    "hatchling",
+]
+
+[project]
+name = "aa-statistics"
+description = "Statistics for Alliance Auth"
+readme = "README.md"
+keywords = [
+    "allianceauth",
+    "eveonline",
+]
+license = { file = "LICENSE" }
+authors = [
+    { name = "AaronKable", email = "aaronkable@gmail.com" },
+]
+requires-python = ">=3.10"
+classifiers = [
+    'Environment :: Web Environment',
+    'Framework :: Django',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3.6',
+    'Topic :: Internet :: WWW/HTTP',
+    'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+]
+dynamic = [
+    "version",
+]
+dependencies = [
+    "allianceauth<6,>=4.6.1"
+]
+urls.Homepage = "https://github.com/Solar-Helix-Independent-Transport/aa-statistics"
+urls.Source = "https://github.com/Solar-Helix-Independent-Transport/aa-statistics"
+urls.Tracker = "https://github.com/Solar-Helix-Independent-Transport/aa-statistics/issues"
+
+[tool.hatch.version]
+path = "aastatistics/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = [
+    "aastatistics"
+]
