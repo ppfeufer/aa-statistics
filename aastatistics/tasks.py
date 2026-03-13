@@ -47,10 +47,10 @@ def update_character_stats(character_id):
             if m.year not in years:
                 years[m.year]={}
             years[m.year][m.month]=m
-        
+
         updates = []
         creates = []
-        for key, month in _stats_json.get('months', []).items(): 
+        for key, month in _stats_json.get('months', []).items():
             new_model = False
             try:
                 zkill_month = years[month.get('year')][month.get('month')]
@@ -62,12 +62,12 @@ def update_character_stats(character_id):
             zkill_month.ships_lost = month.get('shipsLost', 0)
             zkill_month.isk_destroyed = month.get('iskDestroyed', 0)
             zkill_month.isk_lost = month.get('iskLost', 0)
-            zkill_month.last_update = datetime.datetime.utcnow().replace(tzinfo=timezone.utc)
+            zkill_month.last_update = timezone.now()
             if new_model:
                 creates.append(zkill_month)
             else:
                 updates.append(zkill_month)
-        
+
         if len(updates) > 0:
             zKillMonth.objects.bulk_update(updates, batch_size=500, fields=['ships_destroyed', 'ships_lost', 'isk_destroyed', 'isk_lost', 'last_update', 'date_str'])
         if len(creates) > 0:
@@ -83,7 +83,7 @@ def update_character_stats(character_id):
     char_model.solo_lost = _stats_json.get('soloLost', 0)
     char_model.active_pvp_kills = _stats_json.get('activepvp', {}).get('kills', {}).get('count', 0)
     char_model.last_kill = _last_kill_date
-    char_model.last_update = datetime.datetime.utcnow().replace(tzinfo=timezone.utc)
+    char_model.last_update = timezone.now()
     char_model.save()
 
     #logger.info('update_character_stats for %s complete' % str(character_id))
@@ -128,7 +128,7 @@ def update_char(self, char_id):
     except Exception as e:
         logger.error("failed to update {}: {}".format(char_id, e))
         return 0  # fail
-    
+
     return 1  # pass
 
 
@@ -184,7 +184,7 @@ def run_aggregate_update():
                         character.save()
                     except ObjectDoesNotExist:
                         logger.info('failed update_character_agregates for %s starting' % str(alt.character_name))
-                        pass # who knows    
+                        pass # who knows
 
 def output_stats(file_output=True):
     active_corp_stats = CorpStats.objects.all()
@@ -238,7 +238,7 @@ def output_stats(file_output=True):
             out_arr[in_char.character_name]=out_str
             #except:
              #   pass
-    
+
     if file_output:
         with open('auth_zkill_dump.csv', 'w') as writeFile:
             writer = csv.writer(writeFile)
@@ -248,4 +248,4 @@ def output_stats(file_output=True):
         writeFile.close()
     else:
         return out_arr
-    
+
